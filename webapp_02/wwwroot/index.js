@@ -26,7 +26,7 @@ function webapp_02() {
     buttonInsert.addEventListener("click", insertEmployee);
     buttonInsertCancel.addEventListener("click", insertEmployeeCancel);
 
-    buttonDelete.addEventListener("click", deleteEmployee);
+    buttonDelete.addEventListener("click", handleButtonDeleteClick);
     buttonDeleteCancel.addEventListener("click", deleteEmployeeCancel);
 
     buttonUpdate.addEventListener("click", updateEmployee);
@@ -65,17 +65,42 @@ function webapp_02() {
     }
 
     function showEmployees(employees) {
-        var employeeTableText = "<table class='table table-striped table-sm'><thead><tr><th scope='col'>Empoyee ID</th><th scope='col'>First Name</th><th scope='col'>Last Name</th><th scope='col'>Salary</th></tr></thead><tbody>";
+        var employeeTableText = "<table class='table table-striped table-sm'><thead><tr><th scope='col'>Empoyee ID</th><th scope='col'>First Name</th><th scope='col'>Last Name</th><th scope='col'>Salary</th><th class='button-column'></th></tr></thead><tbody>";
 
         for (var i = 0; i < employees.length; i++) {
             var employee = employees[i];
 
-            employeeTableText = employeeTableText + "<tr><th scope='row'>" + employee.employeeId + "</th><td>" + employee.firstName + "</td><td>" + employee.lastName + "</td><td>" + employee.salary + "</td></tr>";
+            employeeTableText = employeeTableText + "<tr><th scope='row'>" + employee.employeeId + "</th><td>" + employee.firstName + "</td><td>" + employee.lastName + "</td><td>" + employee.salary + "</td><td><div class='row g-2'><div class='col-auto'><button type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-update'>Update</button></div><div class='col-auto'><button id='' type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-delete'>Delete</button></div></div></td></tr>";
         }
 
         employeeTableText = employeeTableText + "</tbody></table>";
 
         employeeTable.innerHTML = employeeTableText;
+
+        var updateButtons = document.getElementsByClassName("btn-employee-table-update");
+
+        for (var i = 0; i < updateButtons.length; i++) {
+            var updateButton = updateButtons[i];
+            updateButton.addEventListener("click", handleEmployeeTableUpdateClick);
+        }
+
+        var deleteButtons = document.getElementsByClassName("btn-employee-table-delete");
+
+        for (var i = 0; i < deleteButtons.length; i++) {
+            var deleteButton = deleteButtons[i];
+            deleteButton.addEventListener("click", handleEmployeeTableDeleteClick);
+        }
+    }
+
+    function handleEmployeeTableUpdateClick(e) {
+        var employeeId = e.target.getAttribute("data-employee-id");
+        alert("you want to update employee " + employeeId)
+    }
+
+    function handleEmployeeTableDeleteClick(e) {
+        var employeeId = e.target.getAttribute("data-employee-id");
+        //alert("you want to delete employee " + employeeId)
+        deleteEmployee(employeeId);
     }
 
     function searchClear() {
@@ -187,11 +212,14 @@ function webapp_02() {
 
     }
 
-    function deleteEmployee() {
-
+    function handleButtonDeleteClick() {
         var textEmployeeId = document.getElementById("text-delete-employee-id");
+        deleteEmployee(textEmployeeId.value);
+    }
 
-        var url = "http://localhost:5120/DeleteEmployee?employeeid=" + textEmployeeId.value;
+    function deleteEmployee(employeeId) {
+
+        var url = "http://localhost:5120/DeleteEmployee?employeeid=" + employeeId;
 
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = doAfterDeleteEmployee;
@@ -216,8 +244,6 @@ function webapp_02() {
                 }
             }
         }
-
-        textEmployeeId.value = "";
 
     }
 

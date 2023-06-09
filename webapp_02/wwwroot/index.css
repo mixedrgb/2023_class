@@ -37,3 +37,7 @@ form {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.button-column {
+    width: 160px;
+}
