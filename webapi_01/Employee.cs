@@ -9,21 +9,21 @@ namespace webapi_01
         public int EmployeeId { get; set; }
         public string? LastName { get; set; }
         public string? FirstName { get; set; }
-        public decimal Salary { get; set; }
+        public decimal? Salary { get; set; }
         public int EmployeeCount { get; set; }
 
         public Employee()
         {
         }
 
-        public Employee(string lastName, string firstName, decimal salary)
+        public Employee(string? lastName, string? firstName, decimal? salary)
         {
             LastName = lastName;
             FirstName = firstName;
             Salary = salary;
         }
 
-        public Employee(int employeeId, string lastName, string firstName, decimal salary)
+        public Employee(int employeeId, string? lastName, string? firstName, decimal? salary)
         {
             EmployeeId = employeeId;
             LastName = lastName;
@@ -31,28 +31,28 @@ namespace webapi_01
             Salary = salary;
         }
 
-        public static List<Employee> GetEmployees(SqlConnection sqlConnection)
-        {
-            List<Employee> employees = new List<Employee>();
+        // public static List<Employee> GetEmployees(SqlConnection sqlConnection)
+        // {
+        //     List<Employee> employees = new List<Employee>();
 
-            string sql = "select EmployeeId, LastName, FirstName, Salary from Employee;";
-            SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
-            sqlCommand.CommandType = System.Data.CommandType.Text;
-            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            while (sqlDataReader.Read())
-            {
-                Employee employee = new Employee();
+        //     string sql = "select EmployeeId, LastName, FirstName, Salary from Employee;";
+        //     SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
+        //     sqlCommand.CommandType = System.Data.CommandType.Text;
+        //     SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+        //     while (sqlDataReader.Read())
+        //     {
+        //         Employee employee = new Employee();
 
-                employee.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"].ToString());
-                employee.LastName = sqlDataReader["LastName"].ToString();
-                employee.FirstName = sqlDataReader["FirstName"].ToString();
-                employee.Salary = Convert.ToDecimal(sqlDataReader["Salary"].ToString() == "" ? "0.00" : sqlDataReader["Salary"].ToString());
+        //         employee.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"].ToString());
+        //         employee.LastName = sqlDataReader["LastName"].ToString();
+        //         employee.FirstName = sqlDataReader["FirstName"].ToString();
+        //         employee.Salary = sqlDataReader["Salary"].ToString() == "" ? null : Convert.ToDecimal(sqlDataReader["Salary"].ToString());
 
-                employees.Add(employee);
-            }
+        //         employees.Add(employee);
+        //     }
 
-            return employees;
-        }
+        //     return employees;
+        // }
 
         public static List<Employee> SearchEmployees(SqlConnection sqlConnection, string search = "", int pageSize = 10, int pageNumber = 1)
         {
@@ -83,7 +83,7 @@ namespace webapi_01
                 employee.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"].ToString());
                 employee.LastName = sqlDataReader["LastName"].ToString();
                 employee.FirstName = sqlDataReader["FirstName"].ToString();
-                employee.Salary = Convert.ToDecimal(sqlDataReader["Salary"].ToString() == "" ? "0.00" : sqlDataReader["Salary"].ToString());
+                employee.Salary = (sqlDataReader["Salary"] == DBNull.Value) ? null : Convert.ToDecimal(sqlDataReader["Salary"].ToString());
                 employee.EmployeeCount = Convert.ToInt32(sqlDataReader["Count"].ToString());
 
                 employees.Add(employee);
@@ -99,17 +99,17 @@ namespace webapi_01
             SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
             sqlCommand.CommandType = System.Data.CommandType.Text;
 
-            SqlParameter paramLastName = new SqlParameter("@LastName", employee.LastName);
-            SqlParameter paramFirstName = new SqlParameter("@FirstName", employee.FirstName);
-            SqlParameter salary = new SqlParameter("@Salary", employee.Salary);
+            SqlParameter paramLastName = new SqlParameter("@LastName", employee.LastName == null ? (object)DBNull.Value : employee.LastName);
+            SqlParameter paramFirstName = new SqlParameter("@FirstName", employee.FirstName == null ? (object)DBNull.Value : employee.FirstName);
+            SqlParameter paramSalary = new SqlParameter("@Salary", employee.Salary == null ? (object)DBNull.Value : employee.Salary);
 
             paramLastName.DbType = System.Data.DbType.String;
             paramFirstName.DbType = System.Data.DbType.String;
-            salary.DbType = System.Data.DbType.Decimal;
+            paramSalary.DbType = System.Data.DbType.Decimal;
 
             sqlCommand.Parameters.Add(paramLastName);
             sqlCommand.Parameters.Add(paramFirstName);
-            sqlCommand.Parameters.Add(salary);
+            sqlCommand.Parameters.Add(paramSalary);
 
             int rowsAffected = sqlCommand.ExecuteNonQuery();
             return rowsAffected;
@@ -123,9 +123,9 @@ namespace webapi_01
             SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection);
             sqlCommand.CommandType = System.Data.CommandType.Text;
 
-            SqlParameter paramLastName = new SqlParameter("@LastName", employee.LastName);
-            SqlParameter paramFirstName = new SqlParameter("@FirstName", employee.FirstName);
-            SqlParameter paramSalary = new SqlParameter("@Salary", employee.Salary);
+            SqlParameter paramLastName = new SqlParameter("@LastName", employee.LastName == null ? (object)DBNull.Value : employee.LastName);
+            SqlParameter paramFirstName = new SqlParameter("@FirstName", employee.FirstName == null ? (object)DBNull.Value : employee.FirstName);
+            SqlParameter paramSalary = new SqlParameter("@Salary", employee.Salary == null ? (object)DBNull.Value : employee.Salary);
             SqlParameter paramEmployeeId = new SqlParameter("@EmployeeId", employee.EmployeeId);
 
             paramLastName.DbType = System.Data.DbType.String;

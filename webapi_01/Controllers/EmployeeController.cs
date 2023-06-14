@@ -56,14 +56,16 @@ public class EmployeeController : ControllerBase
 
     [HttpGet]
     [Route("/InsertEmployee")]
-    public Response InsertEmployee(string lastName, string firstName, string salary)
+    public Response InsertEmployee(string? lastName, string? firstName, string? salary)
     {
         Response response = new Response();
         try
         {
             List<Employee> employees = new List<Employee>();
 
-            Employee employee = new Employee(lastName, firstName, Convert.ToDecimal(salary));
+            decimal? salaryOrNull = salary != null ? Convert.ToDecimal(salary) : null;
+
+            Employee employee = new Employee(lastName, firstName, salaryOrNull);
 
             int rowsAffected = 0;
 
@@ -90,14 +92,17 @@ public class EmployeeController : ControllerBase
 
     [HttpGet]
     [Route("/UpdateEmployee")]
-    public Response UpdateEmployee(string employeeId, string lastName, string firstName, string salary)
+    public Response UpdateEmployee(string employeeId, string? lastName, string? firstName, string? salary)
     {
         Response response = new Response();
 
         try
         {
             List<Employee> employees = new List<Employee>();
-            Employee employee = new Employee(Convert.ToInt32(employeeId), lastName, firstName, Convert.ToDecimal(salary));
+
+            decimal? salaryOrNull = salary != null ? Convert.ToDecimal(salary) : null;
+
+            Employee employee = new Employee(Convert.ToInt32(employeeId), lastName, firstName, salaryOrNull);
 
             int rowsAffected = 0;
 

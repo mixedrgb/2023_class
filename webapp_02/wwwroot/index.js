@@ -70,7 +70,9 @@ function webapp_02() {
         for (var i = 0; i < employees.length; i++) {
             var employee = employees[i];
 
-            employeeTableText = employeeTableText + "<tr><th scope='row'>" + employee.employeeId + "</th><td>" + employee.firstName + "</td><td>" + employee.lastName + "</td><td>" + employee.salary + "</td><td><div class='row g-2'><div class='col-auto'><button type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-update'>Update</button></div><div class='col-auto'><button id='' type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-delete'>Delete</button></div></div></td></tr>";
+            var employeeSalary = (employee.salary === null) ? "" : employee.salary;
+
+            employeeTableText = employeeTableText + "<tr><th scope='row'>" + employee.employeeId + "</th><td>" + employee.firstName + "</td><td>" + employee.lastName + "</td><td>" + employeeSalary + "</td><td><div class='row g-2'><div class='col-auto'><button type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-update'>Update</button></div><div class='col-auto'><button id='' type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-delete'>Delete</button></div></div></td></tr>";
         }
 
         employeeTableText = employeeTableText + "</tbody></table>";
