@@ -9,6 +9,7 @@ function webapp_02() {
 
     var employeeTable = document.getElementById("employee-table");
 
+    var buttonShowInsertForm = document.getElementById("button-show-insert-form");
     var buttonInsert = document.getElementById("button-insert");
     var buttonInsertCancel = document.getElementById("button-insert-cancel");
 
@@ -23,6 +24,7 @@ function webapp_02() {
     buttonSearch.addEventListener("click", searchEmployees);
     buttonSearchClear.addEventListener("click", searchClear);
 
+    buttonShowInsertForm.addEventListener("click", showInsertForm);
     buttonInsert.addEventListener("click", insertEmployee);
     buttonInsertCancel.addEventListener("click", insertEmployeeCancel);
 
@@ -72,7 +74,7 @@ function webapp_02() {
 
             var employeeSalary = (employee.salary === null) ? "" : employee.salary;
 
-            employeeTableText = employeeTableText + "<tr><th scope='row'>" + employee.employeeId + "</th><td>" + employee.firstName + "</td><td>" + employee.lastName + "</td><td>" + employeeSalary + "</td><td><div class='row g-2'><div class='col-auto'><button type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-update'>Update</button></div><div class='col-auto'><button id='' type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-delete'>Delete</button></div></div></td></tr>";
+            employeeTableText = employeeTableText + "<tr><th scope='row'>" + employee.employeeId + "</th><td id='emp-" + employee.employeeId + "-first-name'>" + employee.firstName + "</td><td id='emp-" + employee.employeeId + "-last-name'>" + employee.lastName + "</td><td id='emp-" + employee.employeeId + "-salary'>" + employeeSalary + "</td><td><div class='row g-2'><div class='col-auto'><button type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-update'>Update</button></div><div class='col-auto'><button id='' type='button' data-employee-id='" + employee.employeeId + "' class='btn btn-outline-primary btn-sm btn-employee-table-delete'>Delete</button></div></div></td></tr>";
         }
 
         employeeTableText = employeeTableText + "</tbody></table>";
@@ -96,7 +98,25 @@ function webapp_02() {
 
     function handleEmployeeTableUpdateClick(e) {
         var employeeId = e.target.getAttribute("data-employee-id");
-        alert("you want to update employee " + employeeId)
+
+        //alert("you want to update employee " + employeeId);
+
+        var rowFirstName = document.getElementById("emp-" + employeeId + "-first-name");
+        var rowLastName = document.getElementById("emp-" + employeeId + "-last-name");
+        var rowSalary = document.getElementById("emp-" + employeeId + "-salary");
+
+        var textEmployeeId = document.getElementById("text-update-employee-id");
+        var textFirstName = document.getElementById("text-update-first-name");
+        var textLastName = document.getElementById("text-update-last-name");
+        var textSalary = document.getElementById("text-update-salary");
+
+        textEmployeeId.value = employeeId;
+        textFirstName.value = rowFirstName.innerText;
+        textLastName.value = rowLastName.innerText;
+        textSalary.value = rowSalary.innerText;
+
+        var updateForm = document.getElementById("form-update");
+        updateForm.classList.remove("visually-hidden");
     }
 
     function handleEmployeeTableDeleteClick(e) {
@@ -108,6 +128,12 @@ function webapp_02() {
     function searchClear() {
         textSearch.value = "";
         searchEmployees();
+    }
+
+    function showInsertForm() {
+        var formInsert = document.getElementById("form-insert");
+        formInsert.classList.remove("visually-hidden");
+        buttonShowInsertForm.classList.add("visually-hidden");
     }
 
     function insertEmployee() {
@@ -142,10 +168,13 @@ function webapp_02() {
             }
         }
 
+        var formInsert = document.getElementById("form-insert");
+        formInsert.classList.add("visually-hidden");
+        buttonShowInsertForm.classList.remove("visually-hidden");
+
         textFirstName.value = "";
         textLastName.value = "";
         textSalary.value = "";
-
     }
 
     function insertEmployeeCancel() {
@@ -154,10 +183,13 @@ function webapp_02() {
         var textLastName = document.getElementById("text-insert-last-name");
         var textSalary = document.getElementById("text-insert-salary");
 
+        var formInsert = document.getElementById("form-insert");
+        formInsert.classList.add("visually-hidden");
+        buttonShowInsertForm.classList.remove("visually-hidden");
+
         textFirstName.value = "";
         textLastName.value = "";
         textSalary.value = "";
-
     }
 
     function updateEmployee() {
@@ -193,11 +225,13 @@ function webapp_02() {
             }
         }
 
+        var updateForm = document.getElementById("form-update");
+        updateForm.classList.add("visually-hidden");
+
         textEmployeeId.value = "";
         textFirstName.value = "";
         textLastName.value = "";
         textSalary.value = "";
-
     }
 
     function updateEmployeeCancel() {
@@ -207,11 +241,13 @@ function webapp_02() {
         var textLastName = document.getElementById("text-update-last-name");
         var textSalary = document.getElementById("text-update-salary");
 
+        var updateForm = document.getElementById("form-update");
+        updateForm.classList.add("visually-hidden");
+
         textEmployeeId.value = "";
         textFirstName.value = "";
         textLastName.value = "";
         textSalary.value = "";
-
     }
 
     function handleButtonDeleteClick() {

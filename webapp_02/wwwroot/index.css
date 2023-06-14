@@ -17,17 +17,10 @@ body {
 
 .my-right {
     background-color: lightgray;
-    text-align: center;
     padding-top: 20px;
 }
 
-.row-insert-update-delete {
-    background-color: lightgray;
-    padding-top: 40px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
+
 
 h4 {
     text-align: center;
