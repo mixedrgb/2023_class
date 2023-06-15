@@ -19,6 +19,13 @@ function webapp_02() {
     var buttonUpdate = document.getElementById("button-update");
     var buttonUpdateCancel = document.getElementById("button-update-cancel");
 
+    var selectRowsPerPage = document.getElementById("select-rows-per-page");
+
+    var buttonPagePrev = document.getElementById("button-page-prev");
+    var textPage = document.getElementById("text-page");
+    var buttonPageNext = document.getElementById("button-page-next");
+    var pRowsMessage = document.getElementById("p-rows-message");
+
     //Add event listeners
 
     buttonSearch.addEventListener("click", searchEmployees);
@@ -34,11 +41,15 @@ function webapp_02() {
     buttonUpdate.addEventListener("click", updateEmployee);
     buttonUpdateCancel.addEventListener("click", updateEmployeeCancel);
 
+    selectRowsPerPage.addEventListener("change", handleChangeRowsPerPage);
+    buttonPagePrev.addEventListener("click", handleButtonPagePrevClick);
+    buttonPageNext.addEventListener("click", handleButtonPageNextClick);
+
     //Functions
 
     function searchEmployees() {
 
-        var url = "http://localhost:5120/SearchEmployees?search=" + textSearch.value;
+        var url = "http://localhost:5120/SearchEmployees?search=" + textSearch.value + "&pageSize=" + selectRowsPerPage.value + "&pageNumber=" + textPage.value;
 
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = doAfterSearchEmployees;
@@ -54,6 +65,7 @@ function webapp_02() {
                     var response = JSON.parse(xhr.responseText);
 
                     if (response.result === "success") {
+                        showSearchResultsMessage(response.employees);
                         showEmployees(response.employees);
                     } else {
                         alert("API Error: " + response.message);
@@ -94,6 +106,44 @@ function webapp_02() {
             var deleteButton = deleteButtons[i];
             deleteButton.addEventListener("click", handleEmployeeTableDeleteClick);
         }
+    }
+
+    function showSearchResultsMessage(employees) {
+
+        var searchResultsCount = 0;
+        if (employees.length > 0) {
+            searchResultsCount = employees[0].employeeCount;
+        }
+
+        var pageSize = Number(selectRowsPerPage.value);
+        var pageNumber = Number(textPage.value);
+
+        var firstNumber = pageSize * pageNumber - pageSize + 1;
+        var secondNumber = firstNumber + pageSize - 1;
+        if (secondNumber > searchResultsCount) {
+            secondNumber = searchResultsCount;
+        }
+
+        pRowsMessage.innerHTML = "Row " + firstNumber + " through " + secondNumber + " of " + searchResultsCount;
+
+    }
+
+    function handleChangeRowsPerPage(e) {
+        //alert("You changed rows per page to " + e.target.value);
+        textPage.value = 1;
+        searchEmployees();
+    }
+
+    function handleButtonPagePrevClick(e) {
+        if (Number(textPage.value) > 1) {
+            textPage.value = Number(textPage.value) - 1;
+            searchEmployees();
+        }
+    }
+
+    function handleButtonPageNextClick(e) {
+        textPage.value = Number(textPage.value) + 1;
+        searchEmployees();
     }
 
     function handleEmployeeTableUpdateClick(e) {
