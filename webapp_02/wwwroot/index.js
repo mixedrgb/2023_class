@@ -28,6 +28,8 @@ function webapp_02() {
 
     //Add event listeners
 
+    textSearch.addEventListener("keyup", handleTextSearchKeyUp);
+
     buttonSearch.addEventListener("click", searchEmployees);
     buttonSearchClear.addEventListener("click", searchClear);
 
@@ -46,6 +48,11 @@ function webapp_02() {
     buttonPageNext.addEventListener("click", handleButtonPageNextClick);
 
     //Functions
+
+    function handleTextSearchKeyUp(e) {
+        textPage.value = 1;
+        searchEmployees();
+    }
 
     function searchEmployees() {
 
