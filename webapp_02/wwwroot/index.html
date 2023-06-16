@@ -16,12 +16,31 @@
     <div class="container">
 
         <div class="row my-header">
-            <div class="col col-12">
-                Header
-            </div>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li>
+                    <a id="anchor-nav-employees" href="#" class="nav-link px-2 link-body-emphasis">
+                        Employees
+                    </a>
+                </li>
+                <li>
+                    <a id="anchor-nav-departments" href="#" class="nav-link px-2 link-body-emphasis">
+                        Departments
+                    </a>
+                </li>
+                <li>
+                    <a id="anchor-nav-products" href="#" class="nav-link px-2 link-body-emphasis">
+                        Products
+                    </a>
+                </li>
+            </ul>
         </div>
 
-        <div class="row">
+        <!-- Employees Page -->
+        <div id="page-employees" class="row">
+
+            <div class="col-12 page-title">
+                <h3>Employees</h3>
+            </div>
 
             <div class="col col-8 col-employee-table">
                 <div id="employee-table"></div>
@@ -77,6 +96,11 @@
                                 class="btn btn-outline-primary">Insert</button>
                         </div>
                     </div>
+
+                    <div class="row mb-2">
+                        <div id="select-department"></div>
+                    </div>
+
                 </form>
                 <!-- Insert/Update/Delete forms - begin -->
 
@@ -160,6 +184,21 @@
 
         </div>
 
+        <!-- Departments Page -->
+        <div id="page-departments" class="row visually-hidden">
+
+            <div class="col-12 page-title">
+                <h3>Departments</h3>
+            </div>
+        </div>
+
+        <!-- Products Page -->
+        <div id="page-products" class="row visually-hidden">
+
+            <div class="col-12 page-title">
+                <h3>Products</h3>
+            </div>
+        </div>
 
         <div class="row my-footer">
             <div class="col col-12">

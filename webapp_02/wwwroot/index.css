@@ -34,3 +34,8 @@ form {
 .button-column {
     width: 160px;
 }
+
+.page-title {
+    background-color: lightgray;
+    text-align: center;
+}

@@ -2,6 +2,14 @@ function webapp_02() {
 
     //Get elements
 
+    var anchorNavEmployees = document.getElementById("anchor-nav-employees");
+    var anchorNavDepartments = document.getElementById("anchor-nav-departments");
+    var anchorNavProducts = document.getElementById("anchor-nav-products");
+
+    var pageEmployees = document.getElementById("page-employees");
+    var pageDepartments = document.getElementById("page-departments");
+    var pageProducts = document.getElementById("page-products");
+
     var textSearch = document.getElementById("text-search");
 
     var buttonSearch = document.getElementById("button-search");
@@ -20,6 +28,7 @@ function webapp_02() {
     var buttonUpdateCancel = document.getElementById("button-update-cancel");
 
     var selectRowsPerPage = document.getElementById("select-rows-per-page");
+    var selectDepartment = document.getElementById("select-department");
 
     var buttonPagePrev = document.getElementById("button-page-prev");
     var textPage = document.getElementById("text-page");
@@ -27,6 +36,11 @@ function webapp_02() {
     var pRowsMessage = document.getElementById("p-rows-message");
 
     //Add event listeners
+    window.addEventListener('popstate', handlePopState);
+
+    anchorNavEmployees.addEventListener("click", handleClickAnchorNavEmployees);
+    anchorNavDepartments.addEventListener("click", handleClickAnchorNavDepartments);
+    anchorNavProducts.addEventListener("click", handleClickAnchorNavProducts);
 
     textSearch.addEventListener("keyup", handleTextSearchKeyUp);
 
@@ -48,6 +62,56 @@ function webapp_02() {
     buttonPageNext.addEventListener("click", handleButtonPageNextClick);
 
     //Functions
+    function handleClickAnchorNavEmployees(e) {
+        window.history.pushState({}, "", "/" + "employees");
+        showPage("employees");
+        e.preventDefault();
+    }
+
+    function handleClickAnchorNavDepartments(e) {
+        window.history.pushState({}, "", "/" + "departments");
+        showPage("departments");
+        e.preventDefault();
+    }
+
+    function handleClickAnchorNavProducts(e) {
+        window.history.pushState({}, "", "/" + "products");
+        showPage("products");
+        e.preventDefault();
+    }
+
+    function showPage(page) {
+        if (page.toLowerCase() === "employees" || page === "") {
+            pageEmployees.classList.remove("visually-hidden");
+            pageDepartments.classList.add("visually-hidden");
+            pageProducts.classList.add("visually-hidden");
+        } else if (page.toLowerCase() === "departments") {
+            pageEmployees.classList.add("visually-hidden");
+            pageDepartments.classList.remove("visually-hidden");
+            pageProducts.classList.add("visually-hidden");
+        } else if (page.toLowerCase() === "products") {
+            pageEmployees.classList.add("visually-hidden");
+            pageDepartments.classList.add("visually-hidden");
+            pageProducts.classList.remove("visually-hidden");
+        }
+    }
+
+    function handleNewUrl() {
+        var page = window.location.pathname.split('/')[1];
+
+        if (page === "") {
+            window.history.replaceState({}, "", "/" + "employees");
+        } else {
+            window.history.replaceState({}, "", "/" + page);
+        }
+
+        showPage(page);
+    }
+
+    function handlePopState() {
+        var page = window.location.pathname.split('/')[1];
+        showPage(page);
+    }
 
     function handleTextSearchKeyUp(e) {
         textPage.value = 1;
@@ -74,6 +138,37 @@ function webapp_02() {
                     if (response.result === "success") {
                         showSearchResultsMessage(response.employees);
                         showEmployees(response.employees);
+                    } else {
+                        alert("API Error: " + response.message);
+                    }
+                } else {
+                    alert("Server Error: " + xhr.status + " " + xhr.statusText);
+                }
+            }
+        }
+
+    }
+
+    function getDepartments() {
+
+        var url = "http://localhost:5120/GetDepartments";
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = doAfterGetDepartments;
+        xhr.open("GET", url);
+
+        xhr.send(null);
+
+        function doAfterGetDepartments() {
+            var DONE = 4; // readyState 4 means the request is done.
+            var OK = 200; // status 200 is a successful return.
+            if (xhr.readyState === DONE) {
+                if (xhr.status === OK) {
+
+                    var response = JSON.parse(xhr.responseText);
+
+                    if (response.result === "success") {
+                        showDepartments(response.departments);
                     } else {
                         alert("API Error: " + response.message);
                     }
@@ -114,6 +209,20 @@ function webapp_02() {
             deleteButton.addEventListener("click", handleEmployeeTableDeleteClick);
         }
     }
+
+    function showDepartments(departments) {
+        var departmentSelectText = "<div class='row mb-2'><select id='select-department' class='form-select form-select-sm'><option selected='' value='0'>Pick One</option>";
+
+        for (var i = 0; i < departments.length; i++) {
+            var department = departments[i];
+            departmentSelectText = departmentSelectText + "<option value='" + department.departmentId + "'>" + department.departmentName + "</option>";
+        }
+
+        departmentSelectText = departmentSelectText + "</select></div>";
+
+        selectDepartment.innerHTML = departmentSelectText;
+    }
+
 
     function showSearchResultsMessage(employees) {
 
@@ -348,7 +457,9 @@ function webapp_02() {
     }
 
     //Invoke searchEmployees() on load
+    handleNewUrl();
     searchEmployees();
+    getDepartments();
 }
 
 webapp_02();
