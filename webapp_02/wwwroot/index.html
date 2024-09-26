@@ -16,112 +16,188 @@
     <div class="container">
 
         <div class="row my-header">
-            <iframe width="1024" height="720" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <div class="col col-12">
-                Header
-            </div>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li>
+                    <a id="anchor-nav-employees" href="#" class="nav-link px-2 link-body-emphasis">
+                        Employees
+                    </a>
+                </li>
+                <li>
+                    <a id="anchor-nav-departments" href="#" class="nav-link px-2 link-body-emphasis">
+                        Departments
+                    </a>
+                </li>
+                <li>
+                    <a id="anchor-nav-products" href="#" class="nav-link px-2 link-body-emphasis">
+                        Products
+                    </a>
+                </li>
+            </ul>
         </div>
 
-        <div class="row">
+        <!-- Employees Page -->
+        <div id="page-employees" class="row">
+
+            <div class="col-12 page-title">
+                <h3>Employees</h3>
+            </div>
 
             <div class="col col-8 col-employee-table">
                 <div id="employee-table"></div>
             </div>
 
             <div class="col col-4 my-right">
-                <form class="row mb-2 g-2">
-                    <div class="col-6">
-                        <input id="text-search" type="text" class="form-control">
+                <form>
+                    <div class="row mb-2 g-2">
+                        <div class="col-6">
+                            <input id="text-search" type="text" class="form-control">
+                        </div>
+                        <div class="col-auto">
+                            <button id="button-search" type="button" class="btn btn-primary">Search</button>
+                        </div>
+                        <div class="col-auto">
+                            <button id="button-search-clear" type="button" class="btn btn-primary">Clear</button>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <button id="button-search" type="button" class="btn btn-primary">Search</button>
+                    <div class="row mb-2">
+                        <div class="col-xs-6">
+                            <label>Rows per page</label>
+                        </div>
+                        <div class="col-xs-6">
+                            <select id="select-rows-per-page" class="form-select form-select-sm">
+                                <option selected value="8">8</option>
+                                <option value="16">16</option>
+                                <option value="32">32</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <button id="button-search-clear" type="button" class="btn btn-primary">Clear</button>
+
+
+                    <div class="row mb-2 g-2">
+                        <div class="col-auto">
+                            <button id="button-page-prev" type="button" class="btn btn-primary">&lt;</button>
+                        </div>
+                        <div class="col-3">
+                            <input id="text-page" type="text" class="form-control" value="1">
+                        </div>
+                        <div class="col-auto">
+                            <button id="button-page-next" type="button" class="btn btn-primary">&gt;</button>
+                        </div>
                     </div>
+
+                    <div class="row mb-2">
+                        <p id="p-rows-message"></p>
+                    </div>
+
+
+                    <div class="row mb-2">
+                        <div class="col-auto">
+                            <button id="button-show-insert-form" type="button"
+                                class="btn btn-outline-primary">Insert</button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div id="select-department"></div>
+                    </div>
+
                 </form>
+                <!-- Insert/Update/Delete forms - begin -->
+
+                <div id="form-insert" class="visually-hidden">
+                    <h4>Insert</h4>
+                    <form>
+                        <div class="mb-2">
+                            <label for="text-insert-first-name" class="form-label">First Name</label>
+                            <input id="text-insert-first-name" type="text" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label for="text-insert-last-name" class="form-label">Last Name</label>
+                            <input id="text-insert-last-name" type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="text-insert-salary" class="form-label">Salary</label>
+                            <input id="text-insert-salary" type="text" class="form-control">
+                        </div>
+                        <div class="row mb-2 g-2">
+                            <div class="col-auto">
+                                <button id="button-insert" type="button" class="btn btn-primary">Insert</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="button-insert-cancel" type="button" class="btn btn-primary">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="form-update" class="visually-hidden">
+                    <h4>Update</h4>
+                    <form>
+                        <div class="mb-2">
+                            <label for="text-update-employee-id" class="form-label">Employee ID</label>
+                            <input id="text-update-employee-id" type="text" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label for="text-update-first-name" class="form-label">First Name</label>
+                            <input id="text-update-first-name" type="text" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label for="text-update-last-name" class="form-label">Last Name</label>
+                            <input id="text-update-last-name" type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="text-update-salary" class="form-label">Salary</label>
+                            <input id="text-update-salary" type="text" class="form-control">
+                        </div>
+                        <div class="row mb-2 g-2">
+                            <div class="col-auto">
+                                <button id="button-update" type="button" class="btn btn-primary">Update</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="button-update-cancel" type="button" class="btn btn-primary">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="form-delete" class="visually-hidden">
+                    <h4>Delete</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="text-delete-employee-id" class="form-label">Employee ID</label>
+                            <input id="text-delete-employee-id" type="text" class="form-control">
+                        </div>
+                        <div class="row mb-2 g-2">
+                            <div class="col-auto">
+                                <button id="button-delete" type="button" class="btn btn-primary">Delete</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="button-delete-cancel" type="button" class="btn btn-primary">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Insert/Update/Delete forms - end -->
+
             </div>
 
         </div>
 
-        <div class="row row-insert-update-delete">
+        <!-- Departments Page -->
+        <div id="page-departments" class="row visually-hidden">
 
-            <div class="col col-4">
-                <h4>Insert</h4>
-                <form>
-                    <div class="mb-2">
-                        <label for="text-insert-first-name" class="form-label">First Name</label>
-                        <input id="text-insert-first-name" type="text" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label for="text-insert-last-name" class="form-label">Last Name</label>
-                        <input id="text-insert-last-name" type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="text-insert-salary" class="form-label">Salary</label>
-                        <input id="text-insert-salary" type="text" class="form-control">
-                    </div>
-                    <div class="row mb-2 g-2">
-                        <div class="col-auto">
-                            <button id="button-insert" type="button" class="btn btn-primary">Insert</button>
-                        </div>
-                        <div class="col-auto">
-                            <button id="button-insert-cancel" type="button" class="btn btn-primary">Cancel</button>
-                        </div>
-                    </div>
-                </form>
+            <div class="col-12 page-title">
+                <h3>Departments</h3>
             </div>
+        </div>
 
-            <div class="col col-4">
-                <h4>Update</h4>
-                <form>
-                    <div class="mb-2">
-                        <label for="text-update-employee-id" class="form-label">Employee ID</label>
-                        <input id="text-update-employee-id" type="text" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label for="text-update-first-name" class="form-label">First Name</label>
-                        <input id="text-update-first-name" type="text" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label for="text-update-last-name" class="form-label">Last Name</label>
-                        <input id="text-update-last-name" type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="text-update-salary" class="form-label">Salary</label>
-                        <input id="text-update-salary" type="text" class="form-control">
-                    </div>
-                    <div class="row mb-2 g-2">
-                        <div class="col-auto">
-                            <button id="button-update" type="button" class="btn btn-primary">Update</button>
-                        </div>
-                        <div class="col-auto">
-                            <button id="button-update-cancel" type="button" class="btn btn-primary">Cancel</button>
-                        </div>
-                    </div>
-                </form>
+        <!-- Products Page -->
+        <div id="page-products" class="row visually-hidden">
+
+            <div class="col-12 page-title">
+                <h3>Products</h3>
             </div>
-
-            <div class="col col-4">
-                <h4>Delete</h4>
-
-                <form>
-                    <div class="mb-3">
-                        <label for="text-delete-employee-id" class="form-label">Employee ID</label>
-                        <input id="text-delete-employee-id" type="text" class="form-control">
-                    </div>
-                    <div class="row mb-2 g-2">
-                        <div class="col-auto">
-                            <button id="button-delete" type="button" class="btn btn-primary">Delete</button>
-                        </div>
-                        <div class="col-auto">
-                            <button id="button-delete-cancel" type="button" class="btn btn-primary">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-
         </div>
 
         <div class="row my-footer">

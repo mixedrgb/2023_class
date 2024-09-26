@@ -15,6 +15,24 @@ if (!app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseDefaultFiles(); //Added by jackmu
+
+
+//jackmu - add rewrite - begin
+app.Use(async (context, next) =>
+{
+    var url = context.Request.Path.Value ?? "";
+    url = url.ToLower();
+
+    if (url.EndsWith("/employees") || url.EndsWith("/departments") || url.EndsWith("/products"))
+    {
+        context.Request.Path = "/index.html";
+    }
+
+    await next();
+});
+//jackmu - add rewrite - end
+
+
 app.UseStaticFiles();
 
 app.UseRouting();
